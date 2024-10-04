@@ -1,20 +1,23 @@
 import FirebaseMessaging
 import UserNotifications
 
-@objc public class KFirebaseMessaging: NSObject, UNUserNotificationCenterDelegate, MessagingDelegate {
+@objc public class KFirebaseMessaging: NSObject {
     @objc public static let shared = KFirebaseMessaging() // Singleton instance
 
     // Closures to handle notification data and FCM token updates
     @objc public var onNotificationReceived: (([AnyHashable: Any]) -> Void)?
+    
     @objc public var onTokenReceived: ((String?) -> Void)? // Callback for when a new token is received
+    
+    @objc public var onNotificationClicked: (([AnyHashable: Any]) -> Void)?
 
-    private override init() {
-        super.init()
-        
-        UNUserNotificationCenter.current().delegate = self
-        Messaging.messaging().delegate = self
+    @objc public func initDelegate(notificationDelegate: UNUserNotificationCenterDelegate, messagesDelegate: MessagingDelegate){
+        UNUserNotificationCenter.current().delegate  = notificationDelegate
+        Messaging.messaging().delegate = messagesDelegate
         Messaging.messaging().isAutoInitEnabled = true
+
     }
+    
     
     // Request notification authorization
     @objc public func requestAuthorization() {
@@ -45,17 +48,8 @@ import UserNotifications
     
     // Get the current FCM token
     @objc public func getToken(completion: @escaping (String?) -> Void) {
-        Messaging.messaging().token { token, error in
-            if let error = error {
-                print("Error fetching FCM registration token: \(error.localizedDescription)")
-                completion(nil)
-            } else if let token = token {
-                print("FCM registration token: \(token)")
-                completion(token)
-            } else {
-                completion(nil)
-            }
-        }
+        completion( Messaging.messaging().fcmToken)
+        
     }
 
     // MARK: - MessagingDelegate methods
@@ -86,7 +80,7 @@ import UserNotifications
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         print("User clicked on notification: \(userInfo)")
-        onNotificationReceived?(userInfo)
+        onNotificationClicked?(userInfo)
         completionHandler()
     }
 }
