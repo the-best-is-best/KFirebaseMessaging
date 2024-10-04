@@ -1,0 +1,6 @@
+use_frameworks!
+target 'KFirebaseMessaging_Tests' do
+  pod 'KFirebaseMessaging', :path => '../'
+  
+  
+end
