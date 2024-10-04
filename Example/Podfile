@@ -1,4 +1,6 @@
 use_frameworks!
+platform :ios, '15.0'  # Set the iOS deployment target
+
 target 'KFirebaseMessaging_Tests' do
   pod 'KFirebaseMessaging', :path => '../'
   
