@@ -6,19 +6,16 @@ import UserNotifications
 
     // Closures to handle notification data and FCM token updates
     @objc public var onNotificationReceived: (([AnyHashable: Any]) -> Void)?
-    
     @objc public var onTokenReceived: ((String?) -> Void)? // Callback for when a new token is received
-    
     @objc public var onNotificationClicked: (([AnyHashable: Any]) -> Void)?
 
-    @objc public func initDelegate(notificationDelegate: UNUserNotificationCenterDelegate, messagesDelegate: MessagingDelegate){
-        UNUserNotificationCenter.current().delegate  = notificationDelegate
+    // Initialize Firebase Messaging and Notification Center delegates
+    @objc public func initDelegate(notificationDelegate: UNUserNotificationCenterDelegate, messagesDelegate: MessagingDelegate) {
+        UNUserNotificationCenter.current().delegate = notificationDelegate
         Messaging.messaging().delegate = messagesDelegate
         Messaging.messaging().isAutoInitEnabled = true
-
     }
-    
-    
+
     // Request notification authorization
     @objc public func requestAuthorization() {
         let center = UNUserNotificationCenter.current()
@@ -36,51 +33,51 @@ import UserNotifications
         }
     }
 
-    // This method gets called when the app successfully registers for remote notifications
+    // Handle successful registration for remote notifications
     @objc public func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        Messaging.messaging().apnsToken = deviceToken // Pass the device token to Firebase Messaging
-       
+        // Pass the device token to Firebase Messaging
+        Messaging.messaging().apnsToken = deviceToken
     }
 
-    public func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("Failed to register for remote notifications: \(error)")
+    // Handle failure to register for remote notifications
+    @objc public func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("Failed to register for remote notifications: \(error.localizedDescription)")
     }
-    
-    // Get the current FCM token
+
+    // Fetch the current FCM token
     @objc public func getToken(completion: @escaping (String?) -> Void) {
-        completion( Messaging.messaging().fcmToken)
-        
+        Messaging.messaging().token { token, error in
+            if let error = error {
+                print("Error fetching FCM token: \(error.localizedDescription)")
+                completion(nil)
+            } else {
+                completion(token)
+            }
+        }
     }
 
     // MARK: - MessagingDelegate methods
 
     // Automatically called when FCM token is refreshed
-    public func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-
-
-        // You can also send the token to your server here
+   @objc public func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         if let token = fcmToken {
             onTokenReceived?(token)
         }
     }
 
-    
     // MARK: - User Notifications Delegate methods
 
-    public func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    // Called when a notification is received while the app is in the foreground
+    @objc  public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
-        print("Received notification while app is in the foreground: \(userInfo)")
-        completionHandler([.alert, .sound, .badge])
+        onNotificationReceived?(userInfo)
+        completionHandler([.alert, .sound, .badge]) // Show notification in the foreground
     }
 
-    public func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void) {
+    // Called when the user interacts with the notification (e.g., taps on it)
+    @objc   public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
-        print("User clicked on notification: \(userInfo)")
-        onNotificationClicked?(userInfo)
+        onNotificationClicked?(userInfo) // Notify app about notification click
         completionHandler()
     }
 }

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'KFirebaseMessaging'
-  s.version          = '0.1.0-beta.2'
+  s.version          = '0.1.0-beta.3'
   s.summary          = 'KFirebaseMessaging: A Kotlin Multiplatform library that simplifies the integration of Firebase Cloud Messaging (FCM) into your apps, enabling push notifications across Android and iOS platforms with minimal setup.
 '
 
