@@ -14,18 +14,6 @@ extension KFirebaseMessaging {
         print("Failed to register for remote notifications: \(error.localizedDescription)")
     }
 
-    // Fetch the current FCM token
-     public func getToken(completion: @escaping (String?) -> Void) {
-        Messaging.messaging().token { token, error in
-            if let error = error {
-                print("Error fetching FCM token: \(error.localizedDescription)")
-                completion(nil)
-            } else {
-                completion(token)
-            }
-        }
-    }
-
     // MARK: - MessagingDelegate methods
 
     // Automatically called when FCM token is refreshed

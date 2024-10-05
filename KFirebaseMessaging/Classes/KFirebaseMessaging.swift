@@ -33,6 +33,18 @@ import UserNotifications
         }
     }
     
+    // Fetch the current FCM token
+    @objc public func getToken(completion: @escaping (String?) -> Void) {
+        Messaging.messaging().token { token, error in
+            if let error = error {
+                print("Error fetching FCM token: \(error.localizedDescription)")
+                completion(nil)
+            } else {
+                completion(token)
+            }
+        }
+    }
+
     @objc public func subscribeTopic(name: String){
         Messaging.messaging().subscribe(toTopic: name)
     }
