@@ -38,4 +38,10 @@ extension KFirebaseMessaging {
         KFirebaseMessaging.shared.onNotificationClicked?(userInfo) // Notify app about notification click
         completionHandler()
     }
+    
+    public func notifyMessagingClicked(_ userInfo: [AnyHashable : Any]){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            KFirebaseMessaging.shared.onNotificationClicked?(userInfo)
+        }
+    }
 }
