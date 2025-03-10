@@ -132,6 +132,7 @@ kotlin {
                 implementation(libs.firebase.messaging)
                 implementation(libs.gson)
                 implementation(libs.kotlinx.datetime)
+                implementation(libs.firebase.messaging.directboot)
 
             }
         }

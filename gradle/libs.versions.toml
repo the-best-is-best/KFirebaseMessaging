@@ -47,6 +47,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 klocal-notification = { module = "io.github.the-best-is-best:klocal-notification", version.ref = "klocalNotification" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+firebase-messaging-directboot = { module = "com.google.firebase:firebase-messaging-directboot" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
