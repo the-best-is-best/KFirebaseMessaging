@@ -1,42 +1,116 @@
 package org.company.simple
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.ui.unit.dp
+import io.github.firebase_core.KFirebaseCore
+import io.gitub.kfirebasemessaging.KFirebaseMessaging
+import io.tbib.klocal_notification.LocalNotification
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import simple.composeapp.generated.resources.Res
-import simple.composeapp.generated.resources.compose_multiplatform
 
 @Composable
 @Preview
 fun App() {
+    var dataNotification by remember { mutableStateOf<Map<Any?, *>>(mapOf("" to "")) }
+
+    val fcm = KFirebaseMessaging.instance()
+    val app = KFirebaseCore.app()
+    println(app.options) // Check this log
+    val scope = rememberCoroutineScope()
+    // Log when setting listeners
+    LocalNotification.setNotificationListener {
+        println("notification received is $it")
+        dataNotification = it ?: mapOf("" to "")
+    }
+
+
+    fcm.setTokenListener {
+        println("User token: $it")
+
+    }
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.safeDrawing)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                ElevatedButton(onClick = {
+                    scope.launch {
+                        val res = LocalNotification.requestAuthorization()
+                        println("per state $res")
+                    }
+
+                }) {
+                    Text("Request permissions")
                 }
+                Spacer(Modifier.height(30.dp))
+
+
+                ElevatedButton(onClick = {
+                    scope.launch {
+                        val res = fcm.getToken()
+
+                        println("token $res")
+                    }
+                }) {
+                    Text("Get token")
+                }
+                Spacer(Modifier.height(30.dp))
+                ElevatedButton(onClick = {
+                    scope.launch {
+                        val res = fcm.subscribeTopic("topic_test")
+                        res.onSuccess {
+                            println("sub to topic correctly")
+                        }
+                        res.onFailure {
+                            println("sub to topic ${it.message}")
+                        }
+                    }
+                }) {
+                    Text("subscribe topic")
+                }
+
+                Spacer(Modifier.height(30.dp))
+                ElevatedButton(onClick = {
+                    scope.launch {
+                        val res = fcm.unsubscribeTopic("topic_test")
+                        res.onSuccess {
+                            println("un sub to topic correctly")
+                        }
+                        res.onFailure {
+                            println("un sub to topic ${it.message}")
+                        }
+                    }
+
+                }) {
+                    Text("un subscribe topic")
+                }
+                Spacer(Modifier.height(30.dp))
+
+                Text("notification received is $dataNotification")
+
             }
         }
     }

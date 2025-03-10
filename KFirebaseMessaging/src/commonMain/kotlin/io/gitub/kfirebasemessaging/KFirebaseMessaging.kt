@@ -1,8 +1,9 @@
 package io.gitub.kfirebasemessaging
 
 expect class KFirebaseMessaging() {
-    fun instance(): KFirebaseMessaging
-
+    companion object {
+        fun instance(): KFirebaseMessaging
+    }
     // Set a listener for the token
     fun setTokenListener(callback: (String?) -> Unit)
 

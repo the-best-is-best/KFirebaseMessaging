@@ -36,7 +36,7 @@ KFirebaseMessaging is available on `mavenCentral()`.
 ## Installation
 
 ```kotlin
-implementation("io.github.the-best-is-best:kfirebase-messaging:1.1.2")
+api("io.github.the-best-is-best:kfirebase-messaging:1.1.2")
 ```
 
 ### First in gradle
@@ -55,19 +55,14 @@ implementation("io.github.the-best-is-best:kfirebase-messaging:1.1.2")
         }
     }
     ...
-    iosMain.dependencies {
-          ...
-            api("io.github.the-best-is-best:klocal-notification")
-            api("kfirebase-messaging")
-        
-        }
+  
 ```
 
 ### androidMain
 
 ```kotlin
 
-KAndroidFirebaseCore.initialize(this)
+AndroidKFirebaseCore.initialize(this)
 AndroidKFirebaseMessagingChannel.initialization(this)
 
 AndroidKMessagingChannel.initialization(this)

@@ -11,14 +11,14 @@ actual class KFirebaseMessaging {
     private val firebaseMessaging = FirebaseMessaging.getInstance()
     private var tokenListener: ((String?) -> Unit)? = null
 
-    companion object {
+    actual companion object {
         val instance: KFirebaseMessaging by lazy { KFirebaseMessaging() }
-    }
 
-    actual fun instance(): KFirebaseMessaging {
-        return instance
-    }
 
+        actual fun instance(): KFirebaseMessaging {
+            return instance
+        }
+    }
     actual fun setTokenListener(callback: (String?) -> Unit) {
         tokenListener = callback
     }

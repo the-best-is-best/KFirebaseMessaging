@@ -10,12 +10,13 @@ import kotlin.coroutines.resume
 actual class KFirebaseMessaging {
     private var tokenListener: ((String?) -> Unit)? = null
 
-    companion object {
-        val instance: KFirebaseMessaging by lazy { KFirebaseMessaging() }
-    }
+    actual companion object {
+        private val instance: KFirebaseMessaging by lazy { KFirebaseMessaging() }
 
-    actual fun instance(): KFirebaseMessaging {
-        return instance
+
+        actual fun instance(): KFirebaseMessaging {
+            return instance
+        }
     }
 
 
