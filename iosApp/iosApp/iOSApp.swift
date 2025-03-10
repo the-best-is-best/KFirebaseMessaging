@@ -1,9 +1,7 @@
 import ComposeApp
 import Firebase
-import KFirebaseMessaging
 import UIKit
 import UserNotifications
-
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate,
   MessagingDelegate
@@ -20,11 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         FirebaseApp.configure()
         
         LocalNotification.shared.doInit(userNotificationCenterDelegate: self)
-        KFirebaseMessaging.shared.doInit(messagingDelegate: self)
-        
+        AppleKFirebaseMessaging().doInit(messagingDelegate: self)
         window = UIWindow(frame: UIScreen.main.bounds)
         if let window = window {
-            window.rootViewController = MainKt.MainViewController()
+            window.rootViewController = MainViewControllerKt.MainViewController()
             window.makeKeyAndVisible()
         }
         // not need add this now
@@ -36,18 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
-    // Register for remote notifications and handle device token registration
-    func application(
-        _ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
-    ) {
-        KFirebaseMessaging.shared.application(
-            application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
-    }
-    // Register for remote notifications and handle device token registration
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        print("APNS Token: \(deviceToken)")
-        Messaging.messaging().apnsToken = deviceToken
-    }
+  
+   
     
     // Handle failure to register for remote notifications
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -60,10 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Messaging.messaging().apnsToken = deviceToken
     }
     
-    // Handle failure to register for remote notifications
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("Failed to register for remote notifications: \(error.localizedDescription)")
-    }
+
     
     // Handle notification when the app is in the foreground
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -79,6 +63,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     // Firebase Messaging delegate method for receiving FCM token
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        KFirebaseMessaging.shared.notifyTokenListener(token: fcmToken)
+        KFirebaseMessaging().notifyTokenListener(token: fcmToken)
     }
 }
