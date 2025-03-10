@@ -26,6 +26,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            export(projects.kFirebaseMessaging)
         }
     }
 
@@ -45,7 +46,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
-            implementation(projects.kFirebaseMessaging)
+            api(projects.kFirebaseMessaging)
         }
     }
 }
