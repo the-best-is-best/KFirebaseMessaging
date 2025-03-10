@@ -34,6 +34,8 @@ KFirebaseMessaging is available on `mavenCentral()`.
 
 ```kotlin
 api("io.github.the-best-is-best:kfirebase-messaging:1.1.2")
+api("io.github.the-best-is-best:klocal-notification:1.0.1")
+
 ```
 
 ### First in gradle
@@ -47,8 +49,8 @@ api("io.github.the-best-is-best:kfirebase-messaging:1.1.2")
         it.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
-            export("io.github.the-best-is-best:klocal-notification")  // Export KLocalNotification so it's available in the framework
-            export("kfirebase-messaging")
+            export("io.github.the-best-is-best:kfirebase-messaging:1.1.2")  // Export KLocalNotification so it's available in the framework
+            export("io.github.the-best-is-best:klocal-notification:1.0.1")
         }
     }
     ...
