@@ -23,6 +23,7 @@ klocalNotification = "1.0.1"
 firebaseBom = "33.10.0"
 gson = "2.11.0"
 kotlinxDatetime = "0.6.2"
+maven-publish = "0.30.0"
 
 [libraries]
 kfirebase-core = { module = "io.github.the-best-is-best:kfirebase-core", version.ref = "kfirebaseCore" }
@@ -56,3 +57,4 @@ composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-mu
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }

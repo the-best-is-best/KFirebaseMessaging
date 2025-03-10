@@ -1,7 +1,13 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.maven.publish)
+    id("maven-publish")
+    id("signing")
 }
+
 
 extra["packageNameSpace"] = "io.github.kfirebase_messaging"
 extra["groupId"] = "io.github.the-best-is-best"
@@ -18,6 +24,54 @@ extra["connectionGit"] = "https://github.com/the-best-is-best/KFirebaseMessaging
 extra["developerName"] = "Michelle Raouf"
 extra["developerNameId"] = "MichelleRaouf"
 extra["developerEmail"] = "eng.michelle.raouf@gmail.com"
+
+
+
+mavenPublishing {
+    coordinates(
+        extra["groupId"].toString(),
+        extra["artifactId"].toString(),
+        extra["version"].toString()
+    )
+
+    publishToMavenCentral(SonatypeHost.S01, true)
+    signAllPublications()
+
+    pom {
+        name.set(extra["packageName"].toString())
+        description.set(extra["packageDescription"].toString())
+        url.set(extra["packageUrl"].toString())
+        licenses {
+            license {
+                name.set("Apache-2.0")
+                url.set("https://opensource.org/licenses/Apache-2.0")
+            }
+        }
+        issueManagement {
+            system.set(extra["system"].toString())
+            url.set(extra["issueUrl"].toString())
+        }
+        scm {
+            connection.set(extra["connectionGit"].toString())
+            url.set(extra["packageUrl"].toString())
+        }
+        developers {
+            developer {
+                id.set(extra["developerNameId"].toString())
+                name.set(extra["developerName"].toString())
+                email.set(extra["developerEmail"].toString())
+            }
+        }
+    }
+
+}
+
+
+signing {
+    useGpgCmd()
+    sign(publishing.publications)
+}
+
 
 val packageName = extra["packageName"].toString()
 
