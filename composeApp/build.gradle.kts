@@ -27,6 +27,8 @@ kotlin {
             baseName = "ComposeApp"
             isStatic = true
             export(projects.kFirebaseMessaging)
+            export(libs.klocal.notification)
+
         }
     }
 
@@ -50,6 +52,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
 
             api(projects.kFirebaseMessaging)
+            api(libs.klocal.notification)
+
         }
     }
 }
