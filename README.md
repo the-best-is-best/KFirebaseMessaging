@@ -27,9 +27,6 @@ KFirebaseMessaging is available on `mavenCentral()`.
 <br>
 
 - Note add permissions notification needed android and ios
-- Note Not dependent on
-  KFirebaseMessaging <a href="https://github.com/the-best-is-best/KFirebaseMessaging">
-  KFirebaseMessaging </a>
 
 <br>
 
