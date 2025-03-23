@@ -33,7 +33,7 @@ KFirebaseMessaging is available on `mavenCentral()`.
 ## Installation
 
 ```kotlin
-api("io.github.the-best-is-best:kfirebase-messaging:1.1.2")
+api("io.github.the-best-is-best:kfirebase-messaging:1.1.3")
 api("io.github.the-best-is-best:klocal-notification:1.0.2")
 
 ```
