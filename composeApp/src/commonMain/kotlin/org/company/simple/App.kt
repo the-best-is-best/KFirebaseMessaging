@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import io.github.firebase_core.KFirebaseCore
 import io.gitub.kfirebasemessaging.KFirebaseMessaging
 import io.tbib.klocal_notification.LocalNotification
+import io.tbib.klocal_notification.LocalNotificationRequestAuthorization
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -46,6 +47,9 @@ fun App() {
         println("User token: $it")
 
     }
+    val localNotificationRequest = LocalNotificationRequestAuthorization {
+        println("permission is $it")
+    }
     MaterialTheme {
 
         LazyColumn(
@@ -58,7 +62,7 @@ fun App() {
             item {
                 ElevatedButton(onClick = {
                     scope.launch {
-                        val res = LocalNotification.requestAuthorization()
+                        val res = localNotificationRequest.launch()
                         println("per state $res")
                     }
 

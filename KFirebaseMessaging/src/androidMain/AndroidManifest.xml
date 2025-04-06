@@ -16,7 +16,7 @@
             tools:node="merge">
 
             <meta-data
-                android:name="io.github.firebase_core.ApplicationContextInitializer"
+                android:name="io.gitub.kfirebasemessaging.ApplicationContextInitializer"
                 android:value="androidx.startup" />
         </provider>
 
