@@ -1,4 +1,4 @@
-rootProject.name = "Simple"
+rootProject.name = "KFirebaseMessaging"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

@@ -106,15 +106,15 @@ kotlin {
         iosX64(),
         iosArm64(),
         iosSimulatorArm64(),
-        macosX64(),
-        macosArm64(),
-        tvosX64(),
-        tvosArm64(),
-        tvosSimulatorArm64(),
+//        macosX64(),
+//        macosArm64(),
+//        tvosX64(),
+//        tvosArm64(),
+//        tvosSimulatorArm64(),
 //        watchosArm32(),
-        watchosX64(),
-        watchosArm64(),
-        watchosSimulatorArm64()
+//        watchosX64(),
+//        watchosArm64(),
+//        watchosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
             baseName = packageName
@@ -126,15 +126,15 @@ kotlin {
                 "iosX64" -> "iosX64.def"
                 "iosArm64" -> "iosArm64.def"
                 "iosSimulatorArm64" -> "iosSimulatorArm64.def"
-                "macosX64" -> "macosX64.def"
-                "macosArm64" -> "macosArm64.def"
-                "tvosX64" -> "tvosX64.def"
-                "tvosArm64" -> "tvosArm64.def"
-                "tvosSimulatorArm64" -> "tvosSimulatorArm64.def"
-                "watchosArm32" -> "watchosArm32.def"
-                "watchosX64" -> "watchosX64.def"
-                "watchosArm64" -> "watchosArm64.def"
-                "watchosSimulatorArm64" -> "watchosSimulatorArm64.def"
+//                "macosX64" -> "macosX64.def"
+//                "macosArm64" -> "macosArm64.def"
+//                "tvosX64" -> "tvosX64.def"
+//                "tvosArm64" -> "tvosArm64.def"
+//                "tvosSimulatorArm64" -> "tvosSimulatorArm64.def"
+//                "watchosArm32" -> "watchosArm32.def"
+//                "watchosX64" -> "watchosX64.def"
+//                "watchosArm64" -> "watchosArm64.def"
+//                "watchosSimulatorArm64" -> "watchosSimulatorArm64.def"
 
 
                 else -> throw IllegalStateException("Unsupported target: ${target.name}")
@@ -187,7 +187,7 @@ kotlin {
                 implementation(libs.gson)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.firebase.messaging.directboot)
-
+                implementation(libs.androidx.startup.runtime )
             }
         }
 
