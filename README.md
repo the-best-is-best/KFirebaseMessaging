@@ -33,19 +33,20 @@ KFirebaseMessaging is available on `mavenCentral()`.
 ## Installation
 
 ```kotlin
-api("io.github.the-best-is-best:kfirebase-messaging:1.1.3")
-api("io.github.the-best-is-best:klocal-notification:1.0.2")
+api("io.github.the-best-is-best:kfirebase-messaging:1.2.0")
+api("io.github.the-best-is-best:klocal-notification:1.1.0")
 
 ```
 
 ### iOS (Using Swift Package Manager - SPM)
 
-Make sure to add Firebase as a dependency using Swift Package Manager (SPM) instead of CocoaPods.
+Make sure to add Firebase as a dependency using Swift Package Manager (SPM).
 
 1. Open your Xcode project.
 2. Navigate to `File > Add Packages...`.
 3. Enter Firebase repository URL: `https://github.com/firebase/firebase-ios-sdk`
 4. Choose `FirebaseCore` and add it to your project.
+5. need add KIOSNotification repository URL: `https://github.com/the-best-is-best/KIOSNotification/tree/0.1.0`
 
 ### First in gradle
 
