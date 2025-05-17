@@ -133,11 +133,12 @@ Make sure to add Firebase as a dependency using Swift Package Manager (SPM).
 
 ### iosApp AppDelegate example
 
-```objectivec
+```swift
 import ComposeApp
 import Firebase
 import UIKit
 import UserNotifications
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate,
   MessagingDelegate
@@ -162,7 +163,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         // not need add this now
         if let userInfo = launchOptions?[.remoteNotification] as? [String: AnyObject] {
-            LocalNotification.shared.notifyNotification(data: userInfo)
+            LocalNotification.shared.notifyPayloadListeners(data: userInfo)
             
         }
         
@@ -193,7 +194,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     // Handle notification when the user interacts with it (taps on the notification)
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
-        LocalNotification.shared.notifyNotification(data: userInfo)
+        LocalNotification.shared.notifyPayloadListeners(data: userInfo)
         completionHandler()
     }
     
@@ -203,14 +204,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 }
 
+
 ```
 
 ### How use it
 
 ```kotlin
-LocalNotification.setNotificationListener {
+ LaunchedEffect(Unit) {
+  LocalNotification.payloadFlow.collect {
     println("notification received is $it")
     dataNotification = it
+  }
 }
 
 
@@ -221,9 +225,21 @@ LocalNotification.setNotificationListener {
 ### For request permission for android `Note`  ios request added in app delegate
 
 ```kotlin
-    fcm.requestAuthorization(callback = {
-    println("per state $it")
-})
+val localNotificationRequest = LocalNotificationRequestAuthorization {
+  println("permission is $it")
+}
+
+ElevatedButton(onClick = {
+  scope.launch {
+    val res = localNotificationRequest.launch()
+    println("per state $res")
+  }
+
+}) {
+  Text("Request permissions")
+}
+
+
 ```
 
 ### For get token fcm
