@@ -1,11 +1,13 @@
 package io.gitub.kfirebasemessaging
 
+import kotlinx.coroutines.flow.SharedFlow
+
 expect class KFirebaseMessaging() {
     companion object {
         fun instance(): KFirebaseMessaging
     }
     // Set a listener for the token
-    fun setTokenListener(callback: (String?) -> Unit)
+    val tokenFlow: SharedFlow<String?>
 
     // Get the current token
     suspend fun getToken(): Result<String?>

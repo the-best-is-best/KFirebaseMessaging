@@ -4,12 +4,15 @@ import android.os.Bundle
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import io.tbib.klocal_notification.LocalNotification
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 actual class KFirebaseMessaging {
     private val firebaseMessaging = FirebaseMessaging.getInstance()
-    private var tokenListener: ((String?) -> Unit)? = null
+    internal val tokenFlowInternal = MutableSharedFlow<String?>(replay = 1, extraBufferCapacity = 1)
+
 
     actual companion object {
         val instance: KFirebaseMessaging by lazy { KFirebaseMessaging() }
@@ -19,9 +22,20 @@ actual class KFirebaseMessaging {
             return instance
         }
     }
-    actual fun setTokenListener(callback: (String?) -> Unit) {
-        tokenListener = callback
+
+    init {
+        firebaseMessaging.token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                tokenFlowInternal.tryEmit(task.result)
+            } else {
+                tokenFlowInternal.tryEmit(null)
+            }
+        }
+
     }
+
+
+    actual val tokenFlow: SharedFlow<String?> = tokenFlowInternal
 
 
     actual suspend fun getToken(): Result<String?> {
@@ -45,6 +59,7 @@ actual class KFirebaseMessaging {
     actual fun deleteToken() {
         FirebaseMessaging.getInstance().deleteToken()
     }
+
 
     actual suspend fun subscribeTopic(name: String): Result<Boolean> {
         return suspendCancellableCoroutine { cont ->
@@ -74,9 +89,6 @@ actual class KFirebaseMessaging {
         }
     }
 
-    internal fun notifyTokenRefreshed(newToken: String) {
-        tokenListener?.invoke(newToken)
-    }
 
 
     fun notifyNotificationClicked(dataBundle: Bundle) {
@@ -96,9 +108,10 @@ actual class KFirebaseMessaging {
 
             // Convert the map to a JSON string using Gson
             val jsonString = Gson().toJson(dataMap)
-            LocalNotification.notifyNotificationListener(jsonString)
+            LocalNotification.notifyPayloadListeners(jsonString)
 
         }
     }
+
 
 }

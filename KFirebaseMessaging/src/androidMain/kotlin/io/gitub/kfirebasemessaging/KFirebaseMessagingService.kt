@@ -31,7 +31,7 @@ class KFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun handleDataMessage(data: Map<String, String>) {
 
-        LocalNotification.notifyNotificationListener(Gson().toJson(data))
+        LocalNotification.notifyPayloadListeners(Gson().toJson(data))
     }
 
     @SuppressLint("LaunchActivityFromNotification")
@@ -61,6 +61,6 @@ class KFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-        KFirebaseMessaging.instance.notifyTokenRefreshed(token)
+        KFirebaseMessaging.instance.tokenFlowInternal.tryEmit(token)
     }
 }

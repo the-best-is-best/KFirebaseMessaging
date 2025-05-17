@@ -3,12 +3,14 @@ package io.gitub.kfirebasemessaging
 import io.github.native.kfirebase_messaging.FIRMessaging
 import io.github.native.kfirebase_messaging.FIRMessagingDelegateProtocol
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 @OptIn(ExperimentalForeignApi::class)
 actual class KFirebaseMessaging {
-    private var tokenListener: ((String?) -> Unit)? = null
+    private val _tokenFlow = MutableSharedFlow<String?>(replay = 1, extraBufferCapacity = 1)
 
     actual companion object {
         private val instance: KFirebaseMessaging by lazy { KFirebaseMessaging() }
@@ -20,13 +22,10 @@ actual class KFirebaseMessaging {
     }
 
 
-    actual fun setTokenListener(callback: (String?) -> Unit) {
-        tokenListener = callback
+    fun notifyTokenListener(token: String?) {
+        _tokenFlow.tryEmit(token)
     }
 
-    fun notifyTokenListener(token: String?) {
-        tokenListener?.invoke(token)
-    }
 
     actual suspend fun getToken(): Result<String?> {
         return suspendCancellableCoroutine { cont ->
@@ -41,10 +40,13 @@ actual class KFirebaseMessaging {
         }
     }
 
+    actual val tokenFlow: SharedFlow<String?> = _tokenFlow
+
     actual fun deleteToken() {
         FIRMessaging.messaging().deleteTokenWithCompletion { }
 
     }
+
 
     actual suspend fun subscribeTopic(name: String): Result<Boolean> {
         return suspendCancellableCoroutine { cont ->

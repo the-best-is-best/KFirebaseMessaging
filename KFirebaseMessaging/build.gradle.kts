@@ -12,7 +12,7 @@ plugins {
 extra["packageNameSpace"] = "io.github.kfirebase_messaging"
 extra["groupId"] = "io.github.the-best-is-best"
 extra["artifactId"] = "kfirebase-messaging"
-extra["version"] = "1.2.0"
+extra["version"] = "1.3.0"
 extra["packageName"] = "KFirebaseMessaging"
 extra["packageUrl"] = "https://github.com/the-best-is-best/KFirebaseMessaging"
 extra["packageDescription"] =
@@ -106,8 +106,8 @@ kotlin {
         iosX64(),
         iosArm64(),
         iosSimulatorArm64(),
-//        macosX64(),
-//        macosArm64(),
+        macosX64(),
+        macosArm64(),
 //        tvosX64(),
 //        tvosArm64(),
 //        tvosSimulatorArm64(),
@@ -126,8 +126,8 @@ kotlin {
                 "iosX64" -> "iosX64.def"
                 "iosArm64" -> "iosArm64.def"
                 "iosSimulatorArm64" -> "iosSimulatorArm64.def"
-//                "macosX64" -> "macosX64.def"
-//                "macosArm64" -> "macosArm64.def"
+                "macosX64" -> "macosX64.def"
+                "macosArm64" -> "macosArm64.def"
 //                "tvosX64" -> "tvosX64.def"
 //                "tvosArm64" -> "tvosArm64.def"
 //                "tvosSimulatorArm64" -> "tvosSimulatorArm64.def"

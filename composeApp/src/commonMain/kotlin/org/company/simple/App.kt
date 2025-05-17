@@ -12,6 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,16 +38,21 @@ fun App() {
     println(app.options) // Check this log
     val scope = rememberCoroutineScope()
     // Log when setting listeners
-    LocalNotification.setNotificationListener {
-        println("notification received is $it")
-        dataNotification = it ?: mapOf("" to "")
+    LaunchedEffect(Unit) {
+        LocalNotification.payloadFlow.collect {
+            println("notification received is $it")
+            dataNotification = it
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        fcm.tokenFlow.collect {
+            println("User token: $it")
+
+        }
     }
 
 
-    fcm.setTokenListener {
-        println("User token: $it")
-
-    }
     val localNotificationRequest = LocalNotificationRequestAuthorization {
         println("permission is $it")
     }
