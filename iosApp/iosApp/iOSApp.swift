@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         // not need add this now
         if let userInfo = launchOptions?[.remoteNotification] as? [String: AnyObject] {
-            LocalNotification.shared.notifyNotification(data: userInfo)
+            LocalNotification.shared.notifyPayloadListeners(data: userInfo)
             
         }
         
@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     // Handle notification when the user interacts with it (taps on the notification)
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
-        LocalNotification.shared.notifyNotification(data: userInfo)
+        LocalNotification.shared.notifyPayloadListeners(data: userInfo)
         completionHandler()
     }
     
