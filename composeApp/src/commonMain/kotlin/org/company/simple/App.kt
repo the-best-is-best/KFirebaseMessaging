@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,6 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import io.github.firebase_core.KFirebaseCore
 import io.gitub.kfirebasemessaging.KFirebaseMessaging
 import io.tbib.klocal_notification.LocalNotification
@@ -31,97 +36,37 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
-    var dataNotification by remember { mutableStateOf<Map<Any?, *>>(mapOf("" to "")) }
+    val navController = rememberNavController()
 
-    val fcm = KFirebaseMessaging.instance()
-    val app = KFirebaseCore.app()
-    println(app.options) // Check this log
-    val scope = rememberCoroutineScope()
-    // Log when setting listeners
-    LaunchedEffect(Unit) {
-        LocalNotification.payloadFlow.collect {
-            println("notification received is $it")
-            dataNotification = it
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        fcm.tokenFlow.collect {
-            println("User token: $it")
-
-        }
-    }
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {
+                Text("Compose App")
+            })
+        },
+    ) { padding ->
 
 
-    val localNotificationRequest = LocalNotificationRequestAuthorization {
-        println("permission is $it")
-    }
-    MaterialTheme {
+        NavHost(
+            modifier = Modifier.padding(padding),
+            navController = navController,
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.safeDrawing)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            startDestination = "/" // Start with the home screen
         ) {
-            item {
-                ElevatedButton(onClick = {
-                    scope.launch {
-                        val res = localNotificationRequest.launch()
-                        println("per state $res")
+            composable("/") {
+                ElevatedButton(
+                    onClick = {
+                        navController.navigate("second")
                     }
-
-                }) {
-                    Text("Request permissions")
+                ) {
+                    Text("Go to second screen")
                 }
-                Spacer(Modifier.height(30.dp))
-
-
-                ElevatedButton(onClick = {
-                    scope.launch {
-                        val res = fcm.getToken()
-
-                        println("token $res")
-                    }
-                }) {
-                    Text("Get token")
-                }
-                Spacer(Modifier.height(30.dp))
-                ElevatedButton(onClick = {
-                    scope.launch {
-                        val res = fcm.subscribeTopic("topic_test")
-                        res.onSuccess {
-                            println("sub to topic correctly")
-                        }
-                        res.onFailure {
-                            println("sub to topic ${it.message}")
-                        }
-                    }
-                }) {
-                    Text("subscribe topic")
-                }
-
-                Spacer(Modifier.height(30.dp))
-                ElevatedButton(onClick = {
-                    scope.launch {
-                        val res = fcm.unsubscribeTopic("topic_test")
-                        res.onSuccess {
-                            println("un sub to topic correctly")
-                        }
-                        res.onFailure {
-                            println("un sub to topic ${it.message}")
-                        }
-                    }
-
-                }) {
-                    Text("un subscribe topic")
-                }
-                Spacer(Modifier.height(30.dp))
-
-                Text("notification received is $dataNotification")
-
             }
+            composable("second") {
+                AppScreen()
+            }
+
+
         }
     }
 }

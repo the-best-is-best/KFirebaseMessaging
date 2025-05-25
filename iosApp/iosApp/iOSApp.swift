@@ -2,6 +2,7 @@ import ComposeApp
 import Firebase
 import UIKit
 import UserNotifications
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate,
   MessagingDelegate

@@ -51,6 +51,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
+            implementation(libs.navigation.compose)
+
             api(projects.kFirebaseMessaging)
             api(libs.klocal.notification)
 
