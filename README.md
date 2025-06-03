@@ -33,8 +33,8 @@ KFirebaseMessaging is available on `mavenCentral()`.
 ## Installation
 
 ```kotlin
-api("io.github.the-best-is-best:kfirebase-messaging:1.3.0")
-api("io.github.the-best-is-best:klocal-notification:1.2.1")
+api("io.github.the-best-is-best:kfirebase-messaging:1.3.1")
+api("io.github.the-best-is-best:klocal-notification:1.2.2")
 
 ```
 
@@ -59,8 +59,8 @@ Make sure to add Firebase as a dependency using Swift Package Manager (SPM).
         it.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
-            export("io.github.the-best-is-best:kfirebase-messaging:1.3.0")  // Export KLocalNotification so it's available in the framework
-            export("io.github.the-best-is-best:klocal-notification:1.2.1")
+            export("io.github.the-best-is-best:kfirebase-messaging:1.3.1")  // Export KLocalNotification so it's available in the framework
+            export("io.github.the-best-is-best:klocal-notification:1.2.2")
         }
     }
     ...

@@ -12,7 +12,7 @@ plugins {
 extra["packageNameSpace"] = "io.github.kfirebase_messaging"
 extra["groupId"] = "io.github.the-best-is-best"
 extra["artifactId"] = "kfirebase-messaging"
-extra["version"] = "1.3.0"
+extra["version"] = "1.3.1"
 extra["packageName"] = "KFirebaseMessaging"
 extra["packageUrl"] = "https://github.com/the-best-is-best/KFirebaseMessaging"
 extra["packageDescription"] =
@@ -82,7 +82,7 @@ kotlin {
 // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
         namespace = "io.gitub.kfirebasemessaging"
-        compileSdk = 35
+        compileSdk = 36
         minSdk = 21
 
         withHostTestBuilder {
@@ -118,7 +118,6 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = packageName
-            isStatic = true
         }
 
         it.compilations.getByName("main") {
@@ -172,7 +171,7 @@ kotlin {
 
         commonTest {
             dependencies {
-                implementation(libs.kotlin.test)
+                //    implementation(libs.kotlin.test)
             }
         }
 
@@ -182,12 +181,11 @@ kotlin {
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
 
-                implementation(project.dependencies.platform(libs.firebase.bom))
                 implementation(libs.firebase.messaging)
                 implementation(libs.gson)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.firebase.messaging.directboot)
-                implementation(libs.androidx.startup.runtime )
+                implementation(libs.androidx.startup.runtime)
             }
         }
 
