@@ -1,5 +1,3 @@
-import com.vanniktech.maven.publish.SonatypeHost
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
@@ -12,7 +10,7 @@ plugins {
 extra["packageNameSpace"] = "io.github.kfirebase_messaging"
 extra["groupId"] = "io.github.the-best-is-best"
 extra["artifactId"] = "kfirebase-messaging"
-extra["version"] = "1.3.1"
+extra["version"] = "1.3.2"
 extra["packageName"] = "KFirebaseMessaging"
 extra["packageUrl"] = "https://github.com/the-best-is-best/KFirebaseMessaging"
 extra["packageDescription"] =
@@ -34,7 +32,7 @@ mavenPublishing {
         extra["version"].toString()
     )
 
-    publishToMavenCentral(SonatypeHost.S01, true)
+    publishToMavenCentral(automaticRelease = true)
     signAllPublications()
 
     pom {
@@ -117,7 +115,7 @@ kotlin {
 //        watchosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = packageName
+            baseName = packageName + "Core"
         }
 
         it.compilations.getByName("main") {
@@ -183,7 +181,6 @@ kotlin {
 
                 implementation(libs.firebase.messaging)
                 implementation(libs.gson)
-                implementation(libs.kotlinx.datetime)
                 implementation(libs.firebase.messaging.directboot)
                 implementation(libs.androidx.startup.runtime)
             }
@@ -265,7 +262,7 @@ abstract class GenerateDefFilesTask : DefaultTask() {
             // Generate the content for the .def file
             val content = """
                 language = Objective-C
-                package = ${packageName.get()}
+                package = "io.github.native.kfirebase_messaging"
                 headers = $headerPath
             """.trimIndent()
 

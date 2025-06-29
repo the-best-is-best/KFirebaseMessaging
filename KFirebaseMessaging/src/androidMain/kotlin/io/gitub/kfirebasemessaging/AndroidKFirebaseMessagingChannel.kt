@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.startup.Initializer
-import io.github.firebase_core.AndroidKFirebaseCore
 import io.gitub.kfirebasemessaging.AndroidKFirebaseMessagingChannel.Companion.applicationContext
 
 class ApplicationContextInitializer : Initializer<Context> {

@@ -16,8 +16,6 @@ actual class KFirebaseMessaging {
 
     actual companion object {
         val instance: KFirebaseMessaging by lazy { KFirebaseMessaging() }
-
-
         actual fun instance(): KFirebaseMessaging {
             return instance
         }
@@ -63,7 +61,6 @@ actual class KFirebaseMessaging {
 
     actual suspend fun subscribeTopic(name: String): Result<Boolean> {
         return suspendCancellableCoroutine { cont ->
-
             FirebaseMessaging.getInstance().subscribeToTopic(name)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
