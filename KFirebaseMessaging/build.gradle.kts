@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
@@ -32,7 +33,7 @@ mavenPublishing {
         extra["version"].toString()
     )
 
-    publishToMavenCentral(automaticRelease = true)
+    publishToMavenCentral(true)
     signAllPublications()
 
     pom {
@@ -178,7 +179,7 @@ kotlin {
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
-
+                implementation(project.dependencies.platform(libs.firebase.bom))
                 implementation(libs.firebase.messaging)
                 implementation(libs.gson)
                 implementation(libs.firebase.messaging.directboot)

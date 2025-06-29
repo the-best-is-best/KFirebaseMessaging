@@ -24,6 +24,7 @@ gson = "2.13.1"
 kotlinxDatetime = "0.6.2"
 maven-publish = "0.33.0"
 startupRuntime = "1.2.0"
+firebaseBom = "33.16.0"
 
 [libraries]
 kfirebase-core = { module = "io.github.the-best-is-best:kfirebase-core", version.ref = "kfirebaseCore" }
@@ -46,7 +47,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 klocal-notification = { module = "io.github.the-best-is-best:klocal-notification", version.ref = "klocalNotification" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-messaging-directboot = { module = "com.google.firebase:firebase-messaging-directboot" }
 androidx-startup-runtime = { module = "androidx.startup:startup-runtime", version.ref = "startupRuntime" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
