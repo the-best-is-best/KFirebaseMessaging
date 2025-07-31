@@ -1,3 +1,0 @@
-language = Objective-C
-package = io.github.native.kfirebase_messaging
-headers = /Users/michelleraouf/Desktop/kmm/KFirebaseMessaging/KFirebaseMessaging/src/interop/libs/macos-arm64_x86_64/FirebaseMessaging.framework/Headers/FirebaseMessaging.h

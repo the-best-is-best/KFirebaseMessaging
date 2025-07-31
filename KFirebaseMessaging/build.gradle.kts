@@ -11,7 +11,7 @@ plugins {
 extra["packageNameSpace"] = "io.github.kfirebase_messaging"
 extra["groupId"] = "io.github.the-best-is-best"
 extra["artifactId"] = "kfirebase-messaging"
-extra["version"] = "1.4.0"
+extra["version"] = "2.0.0"
 extra["packageName"] = "KFirebaseMessaging"
 extra["packageUrl"] = "https://github.com/the-best-is-best/KFirebaseMessaging"
 extra["packageDescription"] =
@@ -119,13 +119,13 @@ kotlin {
             baseName = packageName + "Core"
         }
 
-        it.compilations.getByName("main") {
-            val defFileName = when (target.name) {
-                "iosX64" -> "iosX64.def"
-                "iosArm64" -> "iosArm64.def"
-                "iosSimulatorArm64" -> "iosSimulatorArm64.def"
-                "macosX64" -> "macosX64.def"
-                "macosArm64" -> "macosArm64.def"
+        // it.compilations.getByName("main") {
+//            val defFileName = when (target.name) {
+//                "iosX64" -> "iosX64.def"
+//                "iosArm64" -> "iosArm64.def"
+//                "iosSimulatorArm64" -> "iosSimulatorArm64.def"
+//                "macosX64" -> "macosX64.def"
+//                "macosArm64" -> "macosArm64.def"
 //                "tvosX64" -> "tvosX64.def"
 //                "tvosArm64" -> "tvosArm64.def"
 //                "tvosSimulatorArm64" -> "tvosSimulatorArm64.def"
@@ -135,19 +135,27 @@ kotlin {
 //                "watchosSimulatorArm64" -> "watchosSimulatorArm64.def"
 
 
-                else -> throw IllegalStateException("Unsupported target: ${target.name}")
+//                else -> throw IllegalStateException("Unsupported target: ${target.name}")
+//            }
+
+//            val defFile = project.file("src/interop/$defFileName")
+//            if (defFile.exists()) {
+//                cinterops.create("FirebaseMessaging") {
+//                    defFile(defFile)
+//                    packageName = "io.github.native.kfirebase_messaging"
+//                }
+//            } else {
+//                logger.warn("Def file not found for target ${target.name}: ${defFile.absolutePath}")
+//            }
+        //}
+        it.compilations.getByName("main") {
+            val firCrashlytics by cinterops.creating {
+                defFile("/Users/michelleraouf/Desktop/kmm/KFirebaseMessaging/KFirebaseMessaging/src/interop/fire_messaging.def")
+                packageName = "io.github.native.kfirebase_messaging"
             }
 
-            val defFile = project.file("src/interop/$defFileName")
-            if (defFile.exists()) {
-                cinterops.create("FirebaseMessaging") {
-                    defFile(defFile)
-                    packageName = "io.github.native.kfirebase_messaging"
-                }
-            } else {
-                logger.warn("Def file not found for target ${target.name}: ${defFile.absolutePath}")
-            }
         }
+
     }
 
 // Source set declarations.
@@ -223,54 +231,42 @@ abstract class GenerateDefFilesTask : DefaultTask() {
         interopDir.get().asFile.mkdirs()
 
         // Constants
-        val firebaseMessagingHeaders = "FirebaseMessaging.framework/Headers/FirebaseMessaging.h"
+        val firebaseMessagingHeaders = "FirebaseMessaging.h"
 
-        // Map targets to their respective paths
-        val targetToPath = mapOf(
-            "iosX64" to "ios-arm64_x86_64-simulator",
-            "iosArm64" to "ios-arm64",
-            "iosSimulatorArm64" to "ios-arm64_x86_64-simulator",
-            "macosX64" to "macos-arm64_x86_64",
-            "macosArm64" to "macos-arm64_x86_64",
-            "tvosArm64" to "tvos-arm64",
-            "tvosX64" to "tvos-arm64_x86_64-simulator",
-            "tvosSimulatorArm64" to "tvos-arm64_x86_64-simulator",
-            "watchosSimulatorArm64" to "watchos-arm64_x86_64-simulator",
-            "watchosX64" to "watchos-arm64_arm64_32",
-            "watchosArm32" to "watchos-arm64_arm64_32",
-            "watchosArm64" to "watchos-arm64_arm64_32",
-        )
+//        // Map targets to their respective paths
+//        val targetToPath = mapOf(
+//            "iosX64" to "ios-arm64_x86_64-simulator",
+//            "iosArm64" to "ios-arm64",
+//            "iosSimulatorArm64" to "ios-arm64_x86_64-simulator",
+//            "macosX64" to "macos-arm64_x86_64",
+//            "macosArm64" to "macos-arm64_x86_64",
+//            "tvosArm64" to "tvos-arm64",
+//            "tvosX64" to "tvos-arm64_x86_64-simulator",
+//            "tvosSimulatorArm64" to "tvos-arm64_x86_64-simulator",
+//            "watchosSimulatorArm64" to "watchos-arm64_x86_64-simulator",
+//            "watchosX64" to "watchos-arm64_arm64_32",
+//            "watchosArm32" to "watchos-arm64_arm64_32",
+//            "watchosArm64" to "watchos-arm64_arm64_32",
+//        )
 
         // Helper function to generate header paths
-        fun headerPath(target: String): String {
-            return interopDir.dir("libs/${targetToPath[target]}/$firebaseMessagingHeaders")
+        fun headerPath(): String {
+            return interopDir.dir("libs/$firebaseMessagingHeaders")
                 .get().asFile.absolutePath
         }
 
-        // Generate headerPaths dynamically
-        val headerPaths = targetToPath.mapValues { (target, _) ->
-            headerPath(target)
-        }
+        val defFile = File(interopDir.get().asFile, "fire_messaging.def")
 
-        // List of targets derived from targetToPath keys
-        val iosTargets = targetToPath.keys.toList()
-
-        // Loop through the targets and create the .def files
-        iosTargets.forEach { target ->
-            val headerPath = headerPaths[target] ?: return@forEach
-            val defFile = File(interopDir.get().asFile, "$target.def")
-
-            // Generate the content for the .def file
-            val content = """
+        // Generate the content for the .def file
+        val content = """
                 language = Objective-C
                 package = "io.github.native.kfirebase_messaging"
-                headers = $headerPath
+                headers = ${headerPath()}
             """.trimIndent()
 
-            // Write content to the .def file
-            defFile.writeText(content)
-            println("Generated: ${defFile.absolutePath} with headers = $headerPath")
-        }
+        // Write content to the .def file
+        defFile.writeText(content)
+
     }
 }
 // Register the task within the Gradle build

@@ -140,7 +140,6 @@ NS_SWIFT_NAME(MessagingAPNSTokenType);
 
 /// Information about a downstream message received by the app.
 NS_SWIFT_NAME(MessagingMessageInfo)
-
 @interface FIRMessagingMessageInfo : NSObject
 
 /// The status of the downstream message
@@ -155,7 +154,6 @@ NS_SWIFT_NAME(MessagingMessageInfo)
  *
  */
 NS_SWIFT_NAME(MessagingDelegate)
-
 @protocol FIRMessagingDelegate <NSObject>
 
 @optional
@@ -167,16 +165,16 @@ NS_SWIFT_NAME(MessagingDelegate)
 ///
 /// * Subscribing to any topics.
 - (void)          messaging:(FIRMessaging *)messaging
-didReceiveRegistrationToken:(nullable NSString
+didReceiveRegistrationToken:(nullable NSString *)fcmToken
+NS_SWIFT_NAME
 
-*)
-fcmToken
-        NS_SWIFT_NAME(messaging(_
+(
+messaging(_
 :didReceiveRegistrationToken:));
 @end
 
 /**
- *  Firebase Messaging lets you reliably deliver messages at no cost.
+ *  Firebase Messaging lets you reliably deliver messages.
  *
  *  To send or receive messages, the app must get a
  *  registration token. This token authorizes an
@@ -187,7 +185,6 @@ fcmToken
  *  and implement the appropriate methods.
  */
 NS_SWIFT_NAME(Messaging)
-
 @interface FIRMessaging : NSObject
 
 /**
@@ -289,11 +286,8 @@ NS_SWIFT_NAME(fcmToken);
 
 - (void)tokenWithCompletion:(void (^)(NSString
 
-*
-_Nullable token,
-        NSError
-*
-_Nullable error
+*_Nullable token,
+NSError *_Nullable error
 ))
 completion;
 
@@ -306,12 +300,7 @@ completion;
  * @param completion The completion handler to handle the token deletion.
  */
 
-- (void)deleteTokenWithCompletion:(void (^)(NSError
-
-*
-_Nullable error
-))
-completion;
+- (void)deleteTokenWithCompletion:(void (^)(NSError *_Nullable error))completion;
 
 /**
  *  Retrieves an FCM registration token for a particular Sender ID. This can be used to allow
@@ -333,13 +322,10 @@ completion;
  *  @param completion The completion handler to handle the token request.
  */
 - (void)retrieveFCMTokenForSenderID:(NSString *)senderID
-                         completion:(void (^)(NSString
+        completion:(void (^)(NSString
 
-*
-_Nullable FCMToken,
-        NSError
-*
-_Nullable error
+*_Nullable FCMToken,
+NSError *_Nullable error
 ))
 completion
         NS_SWIFT_NAME(retrieveFCMToken(forSenderID
@@ -354,13 +340,11 @@ completion
  * @param completion The completion handler to handle the token deletion.
  */
 - (void)deleteFCMTokenForSenderID:(NSString *)senderID
-                       completion:(void (^)(NSError
+        completion:(void (^)(NSError *_Nullable error))completion
+NS_SWIFT_NAME
 
-*
-_Nullable error
-))
-completion
-        NS_SWIFT_NAME(deleteFCMToken(forSenderID
+(
+deleteFCMToken(forSenderID
 :completion:));
 
 #pragma mark - Topics
@@ -389,15 +373,8 @@ subscribe(toTopic
  *                    On success, the error parameter is always `nil`. Otherwise, an
  *                    appropriate error object is returned.
  */
-- (void)subscribeToTopic:(nonnull NSString
-
-*)
-topic
-        completion
-:(
-void (^_Nullable)(NSError * _Nullable
-error))
-completion;
+- (void)subscribeToTopic:(nonnull NSString *)topic
+              completion:(void (^ _Nullable)(NSError *_Nullable error))completion;
 
 /**
  * Asynchronously unsubscribe from a topic.  This uses a FCM Token
@@ -422,15 +399,8 @@ unsubscribe(fromTopic
  *                     In case of success, nil error is returned. Otherwise, an
  *                     appropriate error object is returned.
  */
-- (void)unsubscribeFromTopic:(nonnull NSString
-
-*)
-topic
-        completion
-:(
-void (^_Nullable)(NSError * _Nullable
-error))
-completion;
+- (void)unsubscribeFromTopic:(nonnull NSString *)topic
+                  completion:(void (^ _Nullable)(NSError *_Nullable error))completion;
 
 #pragma mark - Analytics
 
@@ -448,7 +418,6 @@ completion;
 - (FIRMessagingMessageInfo *)appDidReceiveMessage:(NSDictionary *)message;
 
 #pragma mark - GDPR
-
 /**
  * Deletes all the tokens and checkin data of the Firebase project and related data on the server
  * side. A network connection is required for the method to succeed.
@@ -459,12 +428,7 @@ completion;
  * @param completion A completion handler which is invoked when the operation completes. `error ==
  * nil` indicates success.
  */
-- (void)deleteDataWithCompletion:(void (^)(NSError
-
-*
-__nullable error
-))
-completion;
+- (void)deleteDataWithCompletion:(void (^)(NSError *__nullable error))completion;
 
 @end
 
