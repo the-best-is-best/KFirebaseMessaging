@@ -66,10 +66,10 @@ mavenPublishing {
 }
 
 
-//signing {
-//    useGpgCmd()
-//    sign(publishing.publications)
-//}
+signing {
+    useGpgCmd()
+    sign(publishing.publications)
+}
 
 
 val packageName = extra["packageName"].toString()
