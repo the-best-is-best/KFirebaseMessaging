@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         }
         val dataBundle = intent.extras
         if (dataBundle != null) {
-            KFirebaseMessaging.instance.notifyNotificationClicked(dataBundle)
+            KFirebaseMessaging.notifyNotificationClicked(dataBundle)
 
         }
 
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         val dataBundle = intent.extras
         if (dataBundle != null) {
-            KFirebaseMessaging.instance.notifyNotificationClicked(dataBundle)
+            KFirebaseMessaging.notifyNotificationClicked(dataBundle)
 
         }
     }

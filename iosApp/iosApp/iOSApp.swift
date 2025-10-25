@@ -33,10 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         return true
     }
-    
-  
-   
-    
+
+
     // Handle failure to register for remote notifications
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Failed to register for remote notifications: \(error.localizedDescription)")
@@ -52,6 +50,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     // Handle notification when the app is in the foreground
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let userInfo = notification.request.content.userInfo
+
+        let title = notification.request.content.title
+        let body = notification.request.content.body
+
+        let fromTopic = userInfo["from"] as? String
+
+        let payload = userInfo.reduce(into: [String: Any]()) { result, entry in
+            if let key = entry.key as? String {
+                result[key] = entry.value
+            }
+        }
+
+        let data = FirebaseNotificationData(
+            title: title,
+            body: body,
+            payload: payload,
+            fromTopic: fromTopic
+        )
+
+        KFirebaseMessaging.shared.notifyNotificationListener(data: data)
         completionHandler([.alert, .sound, .badge]) // Show notification in the foreground
     }
     

@@ -2,10 +2,8 @@ package io.gitub.kfirebasemessaging
 
 import kotlinx.coroutines.flow.SharedFlow
 
-expect class KFirebaseMessaging() {
-    companion object {
-        fun instance(): KFirebaseMessaging
-    }
+expect object KFirebaseMessaging {
+
     // Set a listener for the token
     val tokenFlow: SharedFlow<String?>
 
@@ -19,6 +17,12 @@ expect class KFirebaseMessaging() {
 
     // Unsubscribe from a topic
     suspend fun unsubscribeTopic(name: String): Result<Boolean>
+
+
+    // Notification flow
+    val notificationFlow: SharedFlow<FirebaseNotificationData>
+
+
 
 
 }

@@ -37,10 +37,12 @@ KFirebaseMessaging is available on `mavenCentral()`.
 
 <br>
 
+### v 2.2.0 add new feature can get notification details
+
 ## Installation
 
 ```kotlin
-api("io.github.the-best-is-best:kfirebase-messaging:2.1.0")
+api("io.github.the-best-is-best:kfirebase-messaging:2.2.0")
 api("io.github.the-best-is-best:klocal-notification:1.4.0")
 
 ```
@@ -140,6 +142,7 @@ Make sure to add Firebase as a dependency using Swift Package Manager (SPM).
 
 ### iosApp AppDelegate example
 
+
 ```swift
 import ComposeApp
 import Firebase
@@ -194,7 +197,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     
     // Handle notification when the app is in the foreground
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+  func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    let userInfo = notification.request.content.userInfo
+
+    let title = notification.request.content.title
+    let body = notification.request.content.body
+
+    let fromTopic = userInfo["from"] as? String
+
+    let payload = userInfo.reduce(into: [String: Any]()) { result, entry in
+      if let key = entry.key as? String {
+        result[key] = entry.value
+      }
+    }
+
+    let data = FirebaseNotificationData(
+            title: title,
+            body: body,
+            payload: payload,
+            fromTopic: fromTopic
+    )
+
+    KFirebaseMessaging.shared.notifyNotificationListener(data: data)
         completionHandler([.alert, .sound, .badge]) // Show notification in the foreground
     }
     
@@ -217,7 +241,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 ### How use it
 
 ```kotlin
- LaunchedEffect(Unit) {
+
+// v2.2.0 add
+LaunchedEffect(Unit) {
+  KFirebaseMessaging.notificationFlow.collect {
+    println("notification received is $it")
+
+  }
+}
+
+
+LaunchedEffect(Unit) {
   LocalNotification.payloadFlow.collect {
     println("notification received is $it")
     dataNotification = it

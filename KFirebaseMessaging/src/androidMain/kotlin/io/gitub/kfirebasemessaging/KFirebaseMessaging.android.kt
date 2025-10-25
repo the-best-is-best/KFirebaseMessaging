@@ -9,20 +9,17 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-actual class KFirebaseMessaging {
-    private val firebaseMessaging = FirebaseMessaging.getInstance()
-    internal val tokenFlowInternal = MutableSharedFlow<String?>(replay = 1, extraBufferCapacity = 1)
+actual object KFirebaseMessaging {
+    private fun firebaseMessaging() = FirebaseMessaging.getInstance()
+    private val tokenFlowInternal = MutableSharedFlow<String?>(replay = 1, extraBufferCapacity = 1)
+    private val _notificationFlow =
+        MutableSharedFlow<FirebaseNotificationData>(replay = 1, extraBufferCapacity = 1)
 
 
-    actual companion object {
-        val instance: KFirebaseMessaging by lazy { KFirebaseMessaging() }
-        actual fun instance(): KFirebaseMessaging {
-            return instance
-        }
-    }
+
 
     init {
-        firebaseMessaging.token.addOnCompleteListener { task ->
+        firebaseMessaging().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 tokenFlowInternal.tryEmit(task.result)
             } else {
@@ -39,7 +36,7 @@ actual class KFirebaseMessaging {
     actual suspend fun getToken(): Result<String?> {
         return suspendCancellableCoroutine { cont ->
 
-            firebaseMessaging.token.addOnCompleteListener { task ->
+            firebaseMessaging().token.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     cont.resume(Result.success(task.result))
                 } else {
@@ -109,6 +106,12 @@ actual class KFirebaseMessaging {
 
         }
     }
+
+    internal fun emitNotification(data: FirebaseNotificationData) {
+        _notificationFlow.tryEmit(data)
+    }
+
+    actual val notificationFlow: SharedFlow<FirebaseNotificationData> = _notificationFlow
 
 
 }

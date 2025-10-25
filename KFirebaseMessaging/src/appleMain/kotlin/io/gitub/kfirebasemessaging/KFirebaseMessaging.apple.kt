@@ -9,17 +9,11 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 @OptIn(ExperimentalForeignApi::class)
-actual class KFirebaseMessaging {
+actual object KFirebaseMessaging {
     private val _tokenFlow = MutableSharedFlow<String?>(replay = 1, extraBufferCapacity = 1)
 
-    actual companion object {
-        private val instance: KFirebaseMessaging by lazy { KFirebaseMessaging() }
-
-
-        actual fun instance(): KFirebaseMessaging {
-            return instance
-        }
-    }
+    private val _notificationFlow =
+        MutableSharedFlow<FirebaseNotificationData>(replay = 1, extraBufferCapacity = 1)
 
 
     fun notifyTokenListener(token: String?) {
@@ -73,6 +67,11 @@ actual class KFirebaseMessaging {
         }
     }
 
+    actual val notificationFlow: SharedFlow<FirebaseNotificationData> = _notificationFlow
+
+    fun notifyNotificationListener(data: FirebaseNotificationData) {
+        _notificationFlow.tryEmit(data)
+    }
 
 }
 

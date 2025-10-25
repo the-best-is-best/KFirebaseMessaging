@@ -13,8 +13,19 @@ class KFirebaseMessagingService : FirebaseMessagingService() {
 
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        super.onMessageReceived(remoteMessage)
+        val data = remoteMessage.data
+        val title = remoteMessage.notification?.title
+        val body = remoteMessage.notification?.body
 
+
+        KFirebaseMessaging.instance.emitNotification(
+            FirebaseNotificationData(
+                title = title,
+                body = body,
+                payload = data,
+                fromTopic = remoteMessage.from
+            )
+        )
         // Handle both notification and data messages
         remoteMessage.data.isNotEmpty().let { hasData ->
             if (hasData && remoteMessage.notification?.body == null) {
@@ -27,10 +38,11 @@ class KFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage.notification != null) {
             handleNotificationMessage(remoteMessage)
         }
+        super.onMessageReceived(remoteMessage)
+
     }
 
     private fun handleDataMessage(data: Map<String, String>) {
-
         LocalNotification.notifyPayloadListeners(Gson().toJson(data))
     }
 

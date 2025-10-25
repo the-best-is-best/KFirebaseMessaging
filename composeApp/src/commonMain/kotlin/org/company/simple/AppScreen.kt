@@ -31,14 +31,14 @@ import kotlinx.coroutines.launch
 fun AppScreen() {
     var dataNotification by remember { mutableStateOf<Map<Any?, *>>(mapOf("" to "")) }
 
-    val fcm = KFirebaseMessaging.instance()
+    val fcm = KFirebaseMessaging
     val app = KFirebaseCore.app()
     println(app.options) // Check this log
     val scope = rememberCoroutineScope()
     // Log when setting listeners
     LaunchedEffect(Unit) {
         LocalNotification.payloadFlow.collect {
-            println("notification received is $it")
+            println("notification payload received is $it")
             dataNotification = it
         }
     }
@@ -117,7 +117,7 @@ fun AppScreen() {
                 }
                 Spacer(Modifier.height(30.dp))
 
-                Text("notification received is $dataNotification")
+                Text("notification payload received is $dataNotification")
 
             }
         }
