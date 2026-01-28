@@ -11,12 +11,9 @@ import kotlin.coroutines.resume
 
 actual object KFirebaseMessaging {
     private fun firebaseMessaging() = FirebaseMessaging.getInstance()
-    private val tokenFlowInternal = MutableSharedFlow<String?>(replay = 1, extraBufferCapacity = 1)
+  internal  val tokenFlowInternal = MutableSharedFlow<String?>(replay = 1, extraBufferCapacity = 1)
     private val _notificationFlow =
         MutableSharedFlow<FirebaseNotificationData>(replay = 1, extraBufferCapacity = 1)
-
-
-
 
     init {
         firebaseMessaging().token.addOnCompleteListener { task ->

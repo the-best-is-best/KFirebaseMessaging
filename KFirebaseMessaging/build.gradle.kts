@@ -11,7 +11,7 @@ plugins {
 extra["packageNameSpace"] = "io.github.kfirebase_messaging"
 extra["groupId"] = "io.github.the-best-is-best"
 extra["artifactId"] = "kfirebase-messaging"
-extra["version"] = "2.2.0"
+extra["version"] = "2.2.1"
 extra["packageName"] = "KFirebaseMessaging"
 extra["packageUrl"] = "https://github.com/the-best-is-best/KFirebaseMessaging"
 extra["packageDescription"] =
@@ -195,13 +195,6 @@ kotlin {
             }
         }
 
-        getByName("androidDeviceTest") {
-            dependencies {
-                implementation(libs.androidx.runner)
-                implementation(libs.androidx.core)
-                implementation(libs.androidx.test.junit)
-            }
-        }
 
         iosMain {
             dependencies {

@@ -18,7 +18,7 @@ class KFirebaseMessagingService : FirebaseMessagingService() {
         val body = remoteMessage.notification?.body
 
 
-        KFirebaseMessaging.instance.emitNotification(
+        KFirebaseMessaging.emitNotification(
             FirebaseNotificationData(
                 title = title,
                 body = body,
@@ -73,6 +73,6 @@ class KFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-        KFirebaseMessaging.instance.tokenFlowInternal.tryEmit(token)
+        KFirebaseMessaging.tokenFlowInternal.tryEmit(token)
     }
 }
