@@ -48,7 +48,7 @@ kotlin {
             implementation(libs.navigation.compose)
 
             api(projects.kFirebaseMessaging)
-            api(libs.klocal.notification)
+            api("io.github.the-best-is-best:klocal-notification-compose:2.0.0")
 
         }
     }

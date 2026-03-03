@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import io.github.firebase_core.KFirebaseCore
 import io.gitub.kfirebasemessaging.KFirebaseMessaging
 import io.tbib.klocal_notification.LocalNotification
-import io.tbib.klocal_notification.LocalNotificationRequestAuthorization
+import io.tbib.klocal_notification_compose.LocalNotificationRequestAuthorization
 import kotlinx.coroutines.launch
 
 @Composable
