@@ -116,7 +116,7 @@ kotlin {
 //        watchosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = packageName + "Core"
+            baseName = packageName + "Messagig"
         }
 
         // it.compilations.getByName("main") {
